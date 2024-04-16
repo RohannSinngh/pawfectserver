@@ -13,7 +13,7 @@ router.get('/', (req, res) => {
     res.send(`Hello world from the server rotuer js`);
 });
 
-// promises
+//promises
 // router.post('/register', (req, res) => {
 //     const { name , email , phone , work, password , cpassword } = req.body;
 
@@ -111,14 +111,13 @@ router.get('/about', authenticate ,(req, res) => {
 // get user data for cintact us and home page
 router.get('/getdata', authenticate, (req, res) => {
     console.log(`Hello my About`);
+    res.clearCookie('jwtoken', {path:'/login'});
     res.send(req.rootUser);
 });
 
 /// contact us page 
 router.post('/contact' , authenticate,async (req, res) => {
-    try {
-        // Assuming you have middleware to authenticate the user, and the user details are available in req.user
-    
+    try {    
         // Get the form data from the request body
         const { name, email, phone, message } = req.body; // object destructuring 
     
@@ -137,22 +136,6 @@ router.post('/contact' , authenticate,async (req, res) => {
             res.status(201).json({message:"Contact form submitted successfully"})
         }
 
-        // Create a new contact object
-        // const newContact = {
-        //   name: name,
-        //   email: email,
-        //   phone: phone,
-        //   message: message
-        // };
-    
-        // Push the contact object to the user's contacts array
-        // req.user.contacts.push(newContact);
-    
-        // Save the updated user data
-        // await req.user.save();
-    
-        // Send a success response
-        // res.status(200).json({ message: 'Contact form submitted successfully' });
       } catch (error) {
         // Handle errors
         console.error('Error submitting contact form:', error);
@@ -160,12 +143,35 @@ router.post('/contact' , authenticate,async (req, res) => {
       }
     });
 
-// logout us page
-router.get('/logout', (req, res) => {
-    console.log(`Hello my logout page`);
-    res.clearCookie('jwtoken', {path:'/login'});
-    res.status(200).send('user successfully logges out');
+// pet adopt  
+router.get('/adoption', authenticate ,(req, res) => {
+    console.log(`Hello welcome to pet addoption`);
+    res.send(req.rootUser);
 });
+
+//pet accessories
+router.get('/accessories', authenticate ,(req, res) => {
+    console.log(`Hello welcome to pet accessories page`);
+    res.send(req.rootUser);
+});
+
+// // logout us page
+// router.get('/logout', (req, res) => {
+//     console.log(`Hello my logout page`);
+//     res.clearCookie('jwtoken', {path:'/login'});
+//     res.status(200).send('user successfully logges out');
+// });
+
+router.get('/logout', (req, res) => {
+    console.log('Hello my LogOut');
+    
+    if (!req.cookies || !req.cookies.jwtoken) {
+      res.status(401).json({ error: 'Login first' });
+    } else {
+      res.clearCookie('jwtoken', { path: '/' });
+      res.status(200).json({ message: 'User LogOut Successfully' });
+    }
+  });
 
     
 module.exports = router;

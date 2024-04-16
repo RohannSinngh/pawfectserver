@@ -4,19 +4,32 @@ const express = require('express');
 const app = express();
 const cookieParser = require('cookie-parser')
 dotenv.config({ path: './config.env' });
-
+const sendgrid = require('@sendgrid/mail');
+const morgan = require("morgan");
+const path = require("path");
 require('./db/conn');
-
+const cors = require('cors');
 
 // using middleware again to avoid undefined error  (because json file nahi samjhta tha)
-app.use(express.json()); 
+app.use(express.json()); // changes buffer to json nahi lagaya tho request.body will be null
+app.use(morgan("tiny"));
+
 app.use(cookieParser());
 // link
 app.use(require('./router/auth'));
+app.use(cors({ origin: 'http://localhost:3000' }));
+
+const pet = require("./routes/pet");
+const category = require("./routes/category");
+const adoption = require("./routes/adoption");
+
+app.use("/public", express.static(path.join(__dirname, "public")));
+
+app.use("/api/pets", pet);
+app.use("/api/category", category);
+app.use("/api/adoption", adoption);
 
 const PORT = process.env.PORT;
-
-
 
 // app.get('/about', (req, res) => {
 //     console.log(`Hello my About`);

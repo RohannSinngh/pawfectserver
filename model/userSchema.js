@@ -1,8 +1,8 @@
-const mongooose = require('mongoose');
+const mongoose = require('mongoose');
 const bcrypt = require ('bcryptjs');
 const jwt = require('jsonwebtoken');
 
-const userSchema = new mongooose.Schema({
+const userSchema = new mongoose.Schema({
     name: {
         type: String,
         required:true
@@ -99,6 +99,6 @@ userSchema.methods.addMessage = async function(name, email, phone, message){
 
 }
 
-const User = mongooose.model('USER', userSchema);
+const User = mongoose.model('USER', userSchema);
 
 module.exports = User;
