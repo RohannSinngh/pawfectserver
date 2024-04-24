@@ -7,9 +7,11 @@ dotenv.config({ path: './config.env' });
 const sendgrid = require('@sendgrid/mail');
 const morgan = require("morgan");
 const path = require("path");
+//contact
+const contactRoute = require('./router/contact-router'); 
 require('./db/conn');
 const cors = require('cors');
-
+const adminRoute = require("./router/admin-router");
 // using middleware again to avoid undefined error  (because json file nahi samjhta tha)
 app.use(express.json()); // changes buffer to json nahi lagaya tho request.body will be null
 app.use(morgan("tiny"));
@@ -28,7 +30,9 @@ app.use("/public", express.static(path.join(__dirname, "public")));
 app.use("/api/pets", pet);
 app.use("/api/category", category);
 app.use("/api/adoption", adoption);
-
+app.use("/api/form", contactRoute) //contact
+// admin route
+app.use ("/api/admin/users", adminRoute);
 const PORT = process.env.PORT;
 
 // app.get('/about', (req, res) => {

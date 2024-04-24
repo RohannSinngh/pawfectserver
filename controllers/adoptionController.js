@@ -24,6 +24,7 @@ exports.getOne = async (req, res) => {
 };
 
 exports.create = async (req, res) => {
+  console.log(req.body)
   try {
     const { firstName, lastName, email, address, phone, pet } = req.body;
 
